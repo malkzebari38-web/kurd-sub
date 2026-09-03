@@ -1,36 +1,63 @@
-name: Build Flutter APK
+import 'package:flutter/material.dart';
 
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
+void main() {
+  runApp(const KurdSubApp());
+}
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+class KurdSubApp extends StatelessWidget {
+  const KurdSubApp({super.key});
 
-    steps:
-    - uses: actions/checkout@v3
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'KurdSub Editor',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
 
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'zulu'
-        java-version: '17'
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.19.x'
-
-    - name: Get dependencies
-      run: flutter pub get
-
-    - name: Build APK
-      run: flutter build apk --release
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: release-apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('KurdSub Editor'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'بەخێربێن بۆ ئەپی کوردسوب',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // لێرەدا کرداری هەڵبژاردنی ڤیدیۆ یان پەڕەی داهاتوو دادەنرێت
+                },
+                icon: const Icon(Icons.video_library),
+                label: const Text('هەڵبژاردنی ڤیدیۆ'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  textStyle: const TextStyle(fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
